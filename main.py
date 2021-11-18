@@ -18,7 +18,7 @@ transform_train = transforms.Compose([
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-    #transforms.RandomErasing(value = (0.4914, 0.4822, 0.4465)),
+    transforms.RandomErasing(value = (0.4914, 0.4822, 0.4465)),
 ])
 
 transform_test = transforms.Compose([
@@ -201,8 +201,7 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss().to('cuda')
     optimizer = optim.SGD(net.parameters(), lr=config['lr'],
                         momentum=config['momentum'], weight_decay=config['weight_decay'])
-    #scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=300)
-    scheduler = None
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=300)
     result = []
     for epoch in range(config['num_epoches']):
         train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler)
